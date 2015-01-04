@@ -1,0 +1,24 @@
+{
+	"name":"GET THE F*** UP (stop sitting)",
+	"version":"0.1",
+	"manifest_version":2,
+    
+	"description":"This extension will make your life better. How? By disrupting you when you sit idle for too long at the screen. Why is sitting bad? Here's why http://bit.ly/1BSr5YX",
+	"browser_action": {
+		"default_icon": "images/sitting.png",
+		"default_title": "Get Up",
+		"default_popup": "popup.html"
+	},
+    
+	"content_security_policy": "script-src 'self' https://www.google.com; object-src 'self'",
+    
+	"icons": {
+		"128": "images/icon.png"
+	},
+    
+    "permissions": [
+    "tabs",
+    "http://*.google.com/",
+    "unlimitedStorage"
+    ]
+}
