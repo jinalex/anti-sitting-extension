@@ -140,15 +140,6 @@ div .box {
 	float: right;
 }
 
-.plus-sign{
-  color: #fff;
-  font-size: 42px;
-  font-family: 'Roboto','sans-serif';
-  font-weight: 300;
-  position: relative;
-  top: -26px;
-  left: 18px;
-}
 #banner{
     position: relative;
 	width: 100%;
@@ -175,7 +166,7 @@ div .box {
 #title{
     background-color: #3F51B5;
     color: #FFF;
-    padding-top: 3.5%;
+    padding-top: 4%;
 	margin: 0px 0px 0px 0px;
 	text-align: left;
 }
@@ -245,8 +236,8 @@ div.image[disabled], div.image[disabled]:hover {
 /*Floating Action Button*/
 #fab {
   position: absolute;
-  left: 462px;
-  top: 395px;
+  left: 28.75em;
+  top: 23em;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -273,6 +264,15 @@ div.image[disabled], div.image[disabled]:hover {
 #fab[disabled], #fab[disabled]:hover, #fab[disabled]:active {
   background: #e0e0e0;
   cursor: default;
+}
+.plus-sign{
+  color: #fff;
+  font-size: 42px;
+  font-family: 'Roboto','sans-serif';
+  font-weight: 300;
+  position: relative;
+  float: left;
+  margin: 6px 0px 0px 19px;
 }
 
 /*CSS Switch*/

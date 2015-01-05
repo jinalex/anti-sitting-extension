@@ -42,16 +42,8 @@
  
         <h2 class="fmedium" >Toggle Notifications<input type="checkbox" id="switch" /><label for="switch" class="label"/></h2>
         
-		<div class="grid">
-			<div class="border-setup">
-			</div>
-		</div>
-        
-        <div id="fab">
-              <h1 class="plus-sign">+</h1>
-        </div>
-		
         <hr>
+        
         <h2 class="fmedium">Intensity of Notifications</h2>
         <div id="intensity"><h3 id="intensityStatus">Subtle</h3></div>
         <input type="range" id="slider" class="dSlider" min="1" max="100" value="1">
@@ -59,12 +51,16 @@
 		
         <h2 class="fmedium">Reminders</h2>
         
+        <div id="fab">
+              <h1 class="plus-sign">+</h1>
+        </div>
+        
 		<div id="reminderCards" class="border-setup">
             <div id="card1" class="card">
                 
             <input class="btn btn-alert btn-sm" type="button" value="X">
-            <div class="image img1"></div>
-            <h2 class="fmedium cardType">Take a Break in</h2>
+            <div class="image img7"></div>
+            <h2 class="fmedium cardType">Stand up and walk in</h2>
 			<select class="time-select">
                 <option value="0">------</option>
 				<option value="1">1 hour</option>
@@ -86,10 +82,13 @@
                 
 		  </div>
         </div>
+        
 	</div>
 
     </body>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.js"></script>
-<script type="text/javascript" src="hamburger.js"></script> 
+<script type="text/javascript" src="hamburger.js"></script>
+<script src="lib/sweet-alert.min.js">
+</script> <link rel="stylesheet" type="text/css" href="lib/sweet-alert.css">
 <script type="text/javascript" src="popup.js"></script>
 </html>

@@ -1,9 +1,75 @@
+//Important Variables
+var cardText = ['Take a Break', 'Rest Your Eyes', 'Grab a Snack', 'Drink Water', 'Stretch Your Neck', 'Stretch Your Back', 'Take a Stroll', 'Custom Prompt'];
+var defaultCard = new cardData(1,1,0,5,false);
+var cardList = {};
+var key = "key"+defaultCard.cardID;
+cardList[key] = defaultCard;
+console.log(cardList);
+
+//Constructor for card data
+function cardData(cardID, imgNum, hour, min, repeat, custMsg) {
+    
+    custMsg = (typeof custMsg === 'undefined') ? "Your Custom Message Here" : custMsg;
+    
+    this.cardID = cardID;
+    this.imgNum = imgNum;
+    this.hour = hour;
+    this.min = min;
+    this.repeat = repeat;
+    this.custMsg = custMsg;
+}
+
+//Adds a new reminder Card
+function addCard(cardDataObj) {
+    $("#reminderCards").prepend($("<div/>", {id: "card"+(cardDataObj.cardID), class: "card"}));
+    $(".card:first-child").append("<input class='btn btn-alert btn-sm' type='button' value='X'>");
+    $(".card:first-child").append("<div class='image img"+cardDataObj.imgNum+"'></div>");
+    $(".card:first-child").append("<h2 class='fmedium cardType'>"+cardText[cardDataObj.imgNum]+" in</h2>");
+    $(".card:first-child").append("<select class='time-select'>" +
+        "<option value='0'>------</option>"+
+        "<option value='1'>1 hour</option>" +
+        "<option value='2'>2 hours</option>"+
+        "<option value='3'>3 hours</option>"+
+        "<option value='4'>4 hours</option>"+
+        "<option value='5'>5 hours</option>"+
+        "<option value='6'>6 hours</option>"+
+        "<option value='7'>7 hours</option>"+
+        "<option value='8'>8 hours</option>"+
+        "<option value='9'>9 hours</option>"+
+        "<option value='10'>10 hours</option>"+
+        "<option value='11'>11 hours</option>"+
+        "<option value='12'>12 hours</option></select>");
+    $(".card:first-child").find('time-select').val(cardDataObj.hour);
+    $(".card:first-child").append("<h3 class='fsmall cardMinute'>5 minutes</h3>");
+    if (cardDataObj.repeat) {
+        $(".card:first-child").append("<input class='onRepeat active' type='button' value='Repeat'>");        
+    } else {
+        $(".card:first-child").append("<input class='onRepeat' type='button' value='Repeat'>");  
+    }
+    $(".card:first-child").append("<input type='range' class='dSlider cardSlider' min='1' max='59' value='"+cardDataObj.min+"'>");
+}
+
 $(document).ready(function(){
+    
+    //Check for Local Storage
+    if(typeof(Storage) !== "undefined") {
+        
+        //TODO LOAD IN INFORMATION AND SET VALUES FOR EVERYTHING
+        
+    } else {
+        
+        swal({   title: "Uh Oh",
+                 text: "Local storage is not supported on your browser!\nYour settings will not be saved.",
+                 type: "error",
+                 confirmButtonText: "Okay" });
+    }
+    
+    //Enable everything
+    document.getElementById("switch").checked = true;
     
     //Toggle Disable
     var thingsToDisable = ".image,.onRepeat,#fab,.dSlider,select,.btn";
     
-    $(thingsToDisable).attr('disabled', 'disabled');
     $("#switch").change(function(){
         if ($(this).is(':checked')) {
         $(thingsToDisable).removeAttr('disabled', 'disabled');
@@ -13,6 +79,7 @@ $(document).ready(function(){
     });
     
     //Listen to Content
+    
     $('#reminderCards').on('change','.time-select', function() {
                 //yeaaah do that
                 alert($(this).parent().attr('id'));
@@ -49,45 +116,24 @@ $(document).ready(function(){
     });
     
     //Add New Card -- TODO run a for loop to initialize hourSelect
-    var cardImg = "<div class='image img1'></div>";
-    var cardType = "<h2 class='fmedium cardType'>Take a Break in</h2>";
-    var hourSelect = "<select class='time-select'>" +
-        "<option value='0'>------</option>"+
-        "<option value='1'>1 hour</option>" +
-        "<option value='2'>2 hours</option>"+
-        "<option value='3'>3 hours</option>"+
-        "<option value='4'>4 hours</option>"+
-        "<option value='5'>5 hours</option>"+
-        "<option value='6'>6 hours</option>"+
-        "<option value='7'>7 hours</option>"+
-        "<option value='8'>8 hours</option>"+
-        "<option value='9'>9 hours</option>"+
-        "<option value='10'>10 hours</option>"+
-        "<option value='11'>11 hours</option>"+
-        "<option value='12'>12 hours</option></select>";
-    var cardMin = "<h3 class='fsmall cardMinute'>5 minutes</h3>";
-    var repeatBtn = "<input class='onRepeat' type='button' value='Repeat'>";
-    var cardSlider = "<input type='range' class='dSlider cardSlider' min='1' max='59' value='5'>";
-    var exitBtn = "<input class='btn btn-alert btn-sm' type='button' value='X'>";
     
-    var i = 1;
+    var id = 1;
     
     $("#fab").click(function(){
         if ($("#fab").attr("disabled") != "disabled"){
-            i++;
-            $("#reminderCards").prepend($("<div/>", {id: "card"+i, class: "card"}));
-            $(".card:first-child").append(exitBtn);
-            $(".card:first-child").append(cardImg);
-            $(".card:first-child").append(cardType);
-            $(".card:first-child").append(hourSelect);
-            $(".card:first-child").append(cardMin);
-            $(".card:first-child").append(repeatBtn);
-            $(".card:first-child").append(cardSlider);
-            
+            id++;
+            defaultCard.cardID = id;
+            addCard(defaultCard);
+            key = "key"+id;
+            cardList[key] = defaultCard;
+            console.log(cardList[key]);
         }
     });
     
     $("#reminderCards").on('click','.btn', function() {
+        key = "key"+($(this).parent().attr('id').match(/\d+/)[0]);
+        delete cardList[key];
+        
         $(this).parent().remove();
     });
     
@@ -130,8 +176,6 @@ $(document).ready(function(){
     });
     
     //Cycle Through Images and Card Types
-    
-    var cardText = ['Take a Break','Rest Your Eyes','Grab a Snack','Drink Water','Stretch Your Neck','Stretch Your Back','Take a Stroll','Custom Prompt'];
     
     $("#reminderCards").on('click', '.image', function(){
         if ($(".image").attr("disabled") != "disabled"){
