@@ -1,8 +1,8 @@
 //Important Variables
-var cardText = ['Take a Break', 'Rest Your Eyes', 'Grab a Snack', 'Drink Water', 'Stretch Your Neck', 'Stretch Your Back', 'Take a Stroll', 'Custom Prompt'];
+var cardText = ['Take a break', 'Rest your eyes', 'Grab a snack', 'Drink water', 'Neck stretch', 'Back stretch', 'Take a stroll', 'Your prompt'];
 var defaultCard = new cardData(1,1,0,5,false);
 var cardList = {};
-var key = "key"+defaultCard.cardID;
+var key = "card"+defaultCard.cardID;
 cardList[key] = defaultCard;
 console.log(cardList);
 
@@ -24,7 +24,7 @@ function addCard(cardDataObj) {
     $("#reminderCards").prepend($("<div/>", {id: "card"+(cardDataObj.cardID), class: "card"}));
     $(".card:first-child").append("<input class='btn btn-alert btn-sm' type='button' value='X'>");
     $(".card:first-child").append("<div class='image img"+cardDataObj.imgNum+"'></div>");
-    $(".card:first-child").append("<h2 class='fmedium cardType'>"+cardText[cardDataObj.imgNum]+" in</h2>");
+    $(".card:first-child").append("<h2 class='fmedium cardType'>"+cardText[cardDataObj.imgNum-1]+" in</h2>");
     $(".card:first-child").append("<select class='time-select'>" +
         "<option value='0'>------</option>"+
         "<option value='1'>1 hour</option>" +
@@ -97,16 +97,25 @@ $(document).ready(function(){
             alert(newDataKey); //works
         }
     });
-    $('#reminderCards').on('click', '.btn', function() {
+    $('#reminderCards').on('click', '.btn-alert', function() {
         //find this key and delete it
         alert($(this).parent().attr('id')); //WORKS
     });
-    $('#reminderCards').on('click', '.onRepeat', function() {
-        //if class == onRepat then toggle repeat to true
+    $('#reminderCards').on('click', '.btn', function() {
+        //find this key and capture msg
+        alert($(this).parent().attr('id'));
+        cardList[$(this).parent().attr('id')].custMsg =
+            prompt("Remind yourself", "Custom message here");
+        
+        alert(cardList[$(this).parent().attr('id')].custMsg);
+    });
+      $("#reminderCards").on('click', '.onRepeat', function(){
+     //if class == onRepat then toggle repeat to true
         //else toggle repeat to false
         alert($(this).parent().attr('id'));
         alert($(this).attr('class')); //Works
-    });
+      });
+    
     $("#reminderCards").on('click', '.image', function(){
         if ($(".image").attr("disabled") != "disabled"){
             //take img value and store it
@@ -115,7 +124,7 @@ $(document).ready(function(){
         }
     });
     
-    //Add New Card -- TODO run a for loop to initialize hourSelect
+    //Add New Card
     
     var id = 1;
     
@@ -123,15 +132,16 @@ $(document).ready(function(){
         if ($("#fab").attr("disabled") != "disabled"){
             id++;
             defaultCard.cardID = id;
+            defaultCard.imgNum = 2;
             addCard(defaultCard);
-            key = "key"+id;
+            key = "card"+id;
             cardList[key] = defaultCard;
             console.log(cardList[key]);
         }
     });
     
-    $("#reminderCards").on('click','.btn', function() {
-        key = "key"+($(this).parent().attr('id').match(/\d+/)[0]);
+    $("#reminderCards").on('click','.btn-alert', function() {
+        key = "card"+($(this).parent().attr('id').match(/\d+/)[0]);
         delete cardList[key];
         
         $(this).parent().remove();
@@ -181,12 +191,15 @@ $(document).ready(function(){
         if ($(".image").attr("disabled") != "disabled"){
             var lastClass = $(this).attr('class').split(' ').pop();
             var imgNum = parseInt(lastClass.substring(3,4));
+            if (imgNum == 7){
+$(this).parent().find(".cardType").replaceWith("<input class='btn message' type='button' value='Your prompt'>")
+            }
             if (imgNum > 7){
                 imgNum = 0;
             }
-            $(this).parent().find(".cardType").html(cardText[imgNum]+" in");
-            $(this).removeClass(lastClass);
-            $(this).addClass("img"+(imgNum+1).toString());
+        $(this).parent().find(".cardType").html(cardText[imgNum]+" in");
+        $(this).removeClass(lastClass);
+        $(this).addClass("img"+(imgNum+1).toString());
         }
     });
     

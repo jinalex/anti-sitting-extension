@@ -1,6 +1,6 @@
 {
 	"name":"GET UP (stop sitting)",
-	"version":"0.6",
+	"version":"0.7",
 	"manifest_version":2,
     
 	"description":"This extension will make your life better. How? By disrupting you when you sit idle for too long at the screen. Why is sitting bad? Here's why http://bit.ly/1BSr5YX",
@@ -13,7 +13,7 @@
 	"content_security_policy": "script-src 'self' https://www.google.com; object-src 'self'",
     
 	"icons": {
-		"128": "images/icon.png"
+		"128": "images/man41.png"
 	},
     
     "permissions": [

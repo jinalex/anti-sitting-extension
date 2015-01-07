@@ -46,8 +46,9 @@ div .box {
       border-radius: 2px;
       font-size: 0.8em;
       top: -2px;
-      background-color: #fff;
-      color: #FFF;
+      background-color: fuchsia;
+      color: #000;
+      border: none;
 }
 .btn-sm{
     float: right;
@@ -57,6 +58,7 @@ div .box {
 	font-size: 15px;
 	padding: 5px;
 	line-height: 15px;
+    color: #fff;
 }
 .btn[disabled],.btn[disabled]:hover{
 	background: #E0E0E0;
@@ -71,7 +73,7 @@ div .box {
   float: left;
   position: relative;
   margin: 0px 365px 8px 7px;
-  width: 80px;
+  width: 60px;
   height: 30px;
   line-height: 16px;
   border-radius: 2px;
@@ -143,7 +145,7 @@ div .box {
 #banner{
     position: relative;
 	width: 100%;
-    max-width: 565px;
+    max-width: 460px;
     min-height: 100px;
 	height: auto;
 	background: #3F51B5;
@@ -154,9 +156,9 @@ div .box {
 }
 #container{
 	width: 100%;
-    max-width: 565px;
+    max-width: 460px;
 	height: auto;
-    min-height: 650px;
+    min-height: 600px;
 	background: #EEEEEE;
 	padding: 5px;
 	position: relative;
@@ -172,7 +174,7 @@ div .box {
 }
 #description{
 	margin: 5px 0px;
-	text-align: center;
+	text-align: left;
 }
 #status{
 	border: 5px solid #FFF;
@@ -185,7 +187,8 @@ div .box {
 div.image{
   float: left;
   margin: 10px 15px 10px 10px;
-  height: 70px;
+  height: 45px;
+  width: 45px;
 }
 
 div.image:hover{
@@ -219,7 +222,7 @@ div.image.img6 {
 
 div.image.img7 {
   content: url("./images/walker.png");
-  width: 70px;
+  width: 45px;
   /*Resize Image Later*/
 }
 
@@ -236,8 +239,8 @@ div.image[disabled], div.image[disabled]:hover {
 /*Floating Action Button*/
 #fab {
   position: absolute;
-  left: 28.75em;
-  top: 23em;
+  left: 355px;
+  top: -102px;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -272,7 +275,7 @@ div.image[disabled], div.image[disabled]:hover {
   font-weight: 300;
   position: relative;
   float: left;
-  margin: 6px 0px 0px 19px;
+  margin: 7px 0px 0px 18px;
 }
 
 /*CSS Switch*/
@@ -367,33 +370,36 @@ input[type=range].dSlider[disabled]::-webkit-slider-runnable-track, input[type=r
   background-color: #FFF;
   border-radius: 2px;
   overflow: hidden;
+  max-height: 140px;
   transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   transition-delay: 0.2s;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.26);
 }
 
 .cardType{
-  font-size: 20px;
+  font-size: 18px;
   display: inline-block;
   text-align: left;
   position: relative;
-  margin: 25px 12px 0px 10px;
+  margin: 25px 8px 0px 4px;
 }
 
 select{
-  margin: 20px 15px 20px 0px;
-  width: 90px;
+  margin: 20px 8px 20px 0px;
+  width: 95px;
+  height: 34px;
 }
 
 .cardMinute{
   display: inline-block;
   text-align: left;
   position: relative;
+  font-size: 16px;
   margin: 25px 0px 0px 0px;
 }
 
 input[type=range].dSlider.cardSlider{
-    width:70%;
-    margin: 15px 35px 25px 25px;
+    width:60%;
+    margin: -28px 60px 25px 25px;
     float: right;
 }

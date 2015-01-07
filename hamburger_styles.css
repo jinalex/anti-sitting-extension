@@ -43,7 +43,7 @@
   width: 50%;
   display: block;
   background: #eee;
-  min-height: 630px;
+  min-height: 560px;
   height: 100%;
   transition: all 300ms;
 }
