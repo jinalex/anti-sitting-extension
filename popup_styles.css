@@ -278,6 +278,33 @@ div.image[disabled], div.image[disabled]:hover {
   margin: 7px 0px 0px 18px;
 }
 
+.message{
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 30px;
+  line-height: 3px;
+  border-radius: 2px;
+  margin: 3px 6px 0px 8px;
+  font-size: 1.2em;
+  font-family: 'Roboto';
+  background-color: #FFF;
+  color: #81D4FA;
+  border: none;
+} .message:hover{
+    cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    transition-delay: 0s;
+    fill: #fff;
+} .message:active{
+  box-shadow: 0 .5px 1px 0 rgba(0, 0, 0, 0.2);
+  transition-delay: 0s;
+  background-color: #F5f5f5;
+}.message[disabled], .message[disabled]:hover, .message[disabled]:active {
+  background: #e0e0e0;
+  cursor: default;
+}
+
 /*CSS Switch*/
 .label {
   float: right;

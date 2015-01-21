@@ -1,10 +1,21 @@
+//TODO
+
+//display correct minutes after LOAD IN
+
+//Start on alarm
+//Timer count down page
+
+//DONE!!!!
+
 //Important Variables
 var cardText = ['Take a break', 'Rest your eyes', 'Grab a snack', 'Drink water', 'Neck stretch', 'Back stretch', 'Take a stroll', 'Your prompt'];
 var defaultCard = new cardData(1,1,0,5,false);
 var cardList = {};
-var key = "card"+defaultCard.cardID;
-cardList[key] = defaultCard;
-console.log(cardList);
+var intensityValues = ['Subtle','Aparent','Obvious','Urgent'];
+var thingsToDisable = ".image,.onRepeat,#fab,.dSlider,select,.btn";
+var intensity = 1;
+var id = 0;
+var key = "card";
 
 //Constructor for card data
 function cardData(cardID, imgNum, hour, min, repeat, custMsg) {
@@ -19,6 +30,59 @@ function cardData(cardID, imgNum, hour, min, repeat, custMsg) {
     this.custMsg = custMsg;
 }
 
+function countElem(obj) {
+    var count = 0;
+
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            ++count;
+    }
+
+    return count;
+}
+  
+//check for changes and save
+function syncStorage(cardList) {
+    // Get a value saved in a form.
+    var storedList = JSON.stringify(cardList);
+    // Check that there's some code there.
+    if (!storedList) {
+      alert("error");
+      return;
+    }
+    localStorage.setItem("data", storedList);
+    //console.log(JSON.parse(storedList));
+  }
+
+//grey-in-out
+function toggleDisable(){
+        if ($("#switch").is(':checked')) {
+            $(thingsToDisable).removeAttr('disabled', 'disabled');
+            localStorage.setItem("toggleOn", true);
+        } else {
+            $(thingsToDisable).attr('disabled', 'disabled');
+            localStorage.setItem("toggleOn", false);
+        }
+}
+
+//updates intensity
+
+function howIntense(intensity){
+        if (intensity < 25) {
+            $("#intensityStatus").html(intensityValues[0]);
+            localStorage.setItem("intensity", 12);
+        } else if (intensity < 50) {
+            $("#intensityStatus").html(intensityValues[1]);
+            localStorage.setItem("intensity", 37);
+        } else if (intensity < 75) {
+            $("#intensityStatus").html(intensityValues[2]);
+            localStorage.setItem("intensity", 62);
+        } else {
+            $("#intensityStatus").html(intensityValues[3]);
+            localStorage.setItem("intensity", 87);
+        } 
+}
+    
 //Adds a new reminder Card
 function addCard(cardDataObj) {
     $("#reminderCards").prepend($("<div/>", {id: "card"+(cardDataObj.cardID), class: "card"}));
@@ -39,8 +103,16 @@ function addCard(cardDataObj) {
         "<option value='10'>10 hours</option>"+
         "<option value='11'>11 hours</option>"+
         "<option value='12'>12 hours</option></select>");
-    $(".card:first-child").find('time-select').val(cardDataObj.hour);
-    $(".card:first-child").append("<h3 class='fsmall cardMinute'>5 minutes</h3>");
+    
+    $(".card:first-child").find('select').val(cardDataObj.hour);
+    
+    minutes = cardDataObj.min;
+        if (minutes == 1) {
+           $(".card:first-child").append("<h3 class='fsmall cardMinute'>1 minute</h3>");
+        } else {
+           $(".card:first-child").append("<h3 class='fsmall cardMinute'>"+cardDataObj.min+" minutes</h3>");
+        }
+    
     if (cardDataObj.repeat) {
         $(".card:first-child").append("<input class='onRepeat active' type='button' value='Repeat'>");        
     } else {
@@ -51,92 +123,101 @@ function addCard(cardDataObj) {
 
 $(document).ready(function(){
     
+    //localStorage.clear();
+    
     //Check for Local Storage
     if(typeof(Storage) !== "undefined") {
-        
-        //TODO LOAD IN INFORMATION AND SET VALUES FOR EVERYTHING
-        
+        if (localStorage.length != 0){
+            cardList = JSON.parse(localStorage.getItem("data"));
+            console.log(cardList);
+            for (i = 0; i < countElem(cardList); i++){
+                id++;
+                addCard(cardList["card"+id]);
+            }
+            intensity = localStorage.getItem("intensity");
+            $(".intense").val(intensity);
+            howIntense(intensity);
+            
+            //What the Hell
+            alert(localStorage.getItem("toggleOn"));
+            if (localStorage.getItem("toggleOn")){
+                alert(localStorage.getItem("toggleOn"));
+                document.getElementById("switch").checked = localStorage.getItem("toggleOn");
+            }
+            toggleDisable();
+            //Is going on
+            
+        } else {
+            cardList = {}
+            intensity = 1;
+            id++;
+            defaultCard.cardID = id;
+            defaultCard.imgNum = Math.floor((Math.random() * 7) + 1);
+            addCard(defaultCard);
+            key = "card"+id;
+            cardList[key] = defaultCard;
+            console.log(cardList);
+            //toggleOn
+            document.getElementById("switch").checked = true;
+        }
     } else {
         
         swal({   title: "Uh Oh",
                  text: "Local storage is not supported on your browser!\nYour settings will not be saved.",
                  type: "error",
                  confirmButtonText: "Okay" });
+    
     }
     
-    //Enable everything
-    document.getElementById("switch").checked = true;
-    
     //Toggle Disable
-    var thingsToDisable = ".image,.onRepeat,#fab,.dSlider,select,.btn";
     
     $("#switch").change(function(){
-        if ($(this).is(':checked')) {
-        $(thingsToDisable).removeAttr('disabled', 'disabled');
-        } else {
-            $(thingsToDisable).attr('disabled', 'disabled');
-        }
+        toggleDisable();
     });
     
-    //Listen to Content
+    //Listen to Card Change
     
     $('#reminderCards').on('change','.time-select', function() {
-                //yeaaah do that
-                alert($(this).parent().attr('id'));
-                alert($(this).val()); //WORKS
+ cardList[$(this).parent().attr('id')].hour = parseInt($(this).val());
+                console.log(cardList);
     });
+    
     $('#reminderCards').on('change','.cardSlider', function() {
-                //find cardid set as key and store in key
-                alert($(this).parent().attr('id'));
-                alert($(this).val()); //WORKS
+    cardList[$(this).parent().attr('id')].min = parseInt($(this).val());
+    console.log(cardList);
     });
-    $('#container').on('click', '#fab', function() {
-        if ($("#fab").attr("disabled") != "disabled"){
-            //create this key and load in errthang
-            var newDataKey = $('#reminderCards').children().attr('id');
-            alert(newDataKey); //works
-        }
-    });
-    $('#reminderCards').on('click', '.btn-alert', function() {
-        //find this key and delete it
-        alert($(this).parent().attr('id')); //WORKS
-    });
-    $('#reminderCards').on('click', '.btn', function() {
-        //find this key and capture msg
-        alert($(this).parent().attr('id'));
-        cardList[$(this).parent().attr('id')].custMsg =
+    
+    $('#reminderCards').on('click', '.message', function() {
+cardList[$(this).parent().attr('id')].custMsg =
             prompt("Remind yourself", "Custom message here");
         
-        alert(cardList[$(this).parent().attr('id')].custMsg);
+        console.log(cardList);
     });
+    
       $("#reminderCards").on('click', '.onRepeat', function(){
-     //if class == onRepat then toggle repeat to true
-        //else toggle repeat to false
-        alert($(this).parent().attr('id'));
-        alert($(this).attr('class')); //Works
+
+          if ($(this).attr('class') == "onRepeat")
+          {
+            cardList[$(this).parent().attr('id')].repeat = true;
+          } else {
+            cardList[$(this).parent().attr('id')].repeat = false;   
+          }
+
+        console.log(cardList);
       });
     
-    $("#reminderCards").on('click', '.image', function(){
-        if ($(".image").attr("disabled") != "disabled"){
-            //take img value and store it
-            alert($(this).parent().attr('id'));
-            alert(parseInt(($(this).attr('class').split(' ').pop()).substring(3,4)));
-        }
-    });
-    
     //Add New Card
-    
-    var id = 1;
     
     $("#fab").click(function(){
         if ($("#fab").attr("disabled") != "disabled"){
             id++;
-            defaultCard.cardID = id;
-            defaultCard.imgNum = 2;
-            addCard(defaultCard);
+            var tempCard = new cardData(id,2,0,5,false);
+            addCard(tempCard);
             key = "card"+id;
-            cardList[key] = defaultCard;
-            console.log(cardList[key]);
+            alert(key);
+            console.log(tempCard);
+            cardList[key] = tempCard;
+            console.log(cardList);
         }
     });
     
@@ -145,23 +226,14 @@ $(document).ready(function(){
         delete cardList[key];
         
         $(this).parent().remove();
+        console.log(cardList);
     });
     
     //Intensity Setting
-    var intensityValues = ['Subtle','Aparent','Obvious','Urgent'];
-    var intensity = 1;
 
     $("#slider").on('input', function(){
         intensity = $('#slider').val();
-        if (intensity < 25) {
-            $("#intensityStatus").html(intensityValues[0]);
-        } else if (intensity < 50) {
-            $("#intensityStatus").html(intensityValues[1]);
-        } else if (intensity < 75) {
-            $("#intensityStatus").html(intensityValues[2]);
-        } else {
-            $("#intensityStatus").html(intensityValues[3]);
-        } 
+        howIntense(intensity);
     });
     
     //Card Settings
@@ -192,15 +264,31 @@ $(document).ready(function(){
             var lastClass = $(this).attr('class').split(' ').pop();
             var imgNum = parseInt(lastClass.substring(3,4));
             if (imgNum == 7){
-$(this).parent().find(".cardType").replaceWith("<input class='btn message' type='button' value='Your prompt'>")
+$(this).parent().find(".cardType").replaceWith("<input class='message' type='button' value='Your Prompt'>")
             }
             if (imgNum > 7){
                 imgNum = 0;
+                $(this).parent().find(".message").replaceWith("<h2 class='fmedium cardType'>What is up in</h2>");
             }
         $(this).parent().find(".cardType").html(cardText[imgNum]+" in");
         $(this).removeClass(lastClass);
         $(this).addClass("img"+(imgNum+1).toString());
+        cardList[$(this).parent().attr('id')].imgNum = parseInt(($(this).attr('class').split(' ').pop()).substring(3,4));
+        console.log(cardList);
         }
     });
     
+    $("#container").on('click', function() {
+        syncStorage(cardList);
+    });
 });
+
+function creationCallback(notID) {
+	if (document.getElementById("clear").checked) {
+		setTimeout(function() {
+			chrome.notifications.clear(notID, function(wasCleared) {
+				console.log("Notification " + notID + " cleared: " + wasCleared);
+			});
+		}, 3000);
+	}
+}
