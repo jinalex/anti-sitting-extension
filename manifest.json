@@ -1,6 +1,6 @@
 {
-	"name":"GET UP (stop sitting)",
-	"version":"0.7",
+	"name":"Anti-Sedentary Desktop Reminder - Alpha",
+	"version":"0.8",
 	"manifest_version":2,
     
 	"description":"This extension will make your life better. How? By disrupting you when you sit idle for too long at the screen. Why is sitting bad? Here's why http://bit.ly/1BSr5YX",
@@ -9,6 +9,10 @@
 		"default_title": "Get Up",
 		"default_popup": "popup.html"
 	},
+    "background": {
+        "scripts": ["js/background.js"]
+    },
+    
     
 	"content_security_policy": "script-src 'self' https://www.google.com; object-src 'self'",
     
@@ -17,8 +21,9 @@
 	},
     
     "permissions": [
-    "tabs",
-    "http://*.google.com/",
-    "unlimitedStorage"
+    "alarms",
+    "notifications",
+    "storage",
+    "background"
     ]
 }

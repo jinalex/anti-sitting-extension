@@ -49,6 +49,8 @@ div .box {
       background-color: fuchsia;
       color: #000;
       border: none;
+} .btn:hover {
+    cursor: pointer;
 }
 .btn-sm{
     float: right;
@@ -168,7 +170,7 @@ div .box {
 #title{
     background-color: #3F51B5;
     color: #FFF;
-    padding-top: 4%;
+    padding-top: 5%;
 	margin: 0px 0px 0px 0px;
 	text-align: left;
 }
@@ -307,12 +309,12 @@ div.image[disabled], div.image[disabled]:hover {
 
 /*CSS Switch*/
 .label {
+  border-radius: 5em;
   float: right;
   width:100px;
   height:30px;
   background:#4FC3F7;
   box-shadow: inset 0 0 0 15px #AFAFAF;
-  border-radius:25px;
   display:block;
   top: 3px;
   position:relative;
@@ -415,6 +417,8 @@ select{
   margin: 20px 8px 20px 0px;
   width: 95px;
   height: 34px;
+} select:hover {
+  cursor: pointer;
 }
 
 .cardMinute{

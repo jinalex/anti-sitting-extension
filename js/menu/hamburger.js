@@ -25,11 +25,3 @@
     });
 
 })();
-
-//$(document).ready(function() {
-//    
-//    $('.material-design-hamburger__icon').click(function() {
-//        $('.container').add('background--blur');
-//    });
-//    
-//});

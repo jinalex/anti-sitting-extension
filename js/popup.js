@@ -1,17 +1,16 @@
 //TODO
 
-//display correct minutes after LOAD IN
+//add in intensity option
+//perhaps add in see all alarm status option
 
-//Start on alarm
-//Timer count down page
 
-//DONE!!!!
 
 //Important Variables
 var cardText = ['Take a break', 'Rest your eyes', 'Grab a snack', 'Drink water', 'Neck stretch', 'Back stretch', 'Take a stroll', 'Your prompt'];
 var defaultCard = new cardData(1,1,0,5,false);
 var cardList = {};
-var intensityValues = ['Subtle','Aparent','Obvious','Urgent'];
+var intensityValues = ['Coming Soon!','Coming Soon!','Coming Soon!','Coming Soon!'];
+//var intensityValues = ['Subtle','Aparent','Obvious','Urgent'];
 var thingsToDisable = ".image,.onRepeat,#fab,.dSlider,select,.btn";
 var intensity = 1;
 var id = 0;
@@ -58,10 +57,10 @@ function syncStorage(cardList) {
 function toggleDisable(){
         if ($("#switch").is(':checked')) {
             $(thingsToDisable).removeAttr('disabled', 'disabled');
-            localStorage.setItem("toggleOn", true);
+            localStorage.setItem("toggleOn", 1);
         } else {
             $(thingsToDisable).attr('disabled', 'disabled');
-            localStorage.setItem("toggleOn", false);
+            localStorage.setItem("toggleOn", -1);
         }
 }
 
@@ -123,7 +122,8 @@ function addCard(cardDataObj) {
 
 $(document).ready(function(){
     
-    //localStorage.clear();
+    if (Notification.permission !== "granted")
+    Notification.requestPermission();
     
     //Check for Local Storage
     if(typeof(Storage) !== "undefined") {
@@ -138,14 +138,18 @@ $(document).ready(function(){
             $(".intense").val(intensity);
             howIntense(intensity);
             
-            //What the Hell
-            alert(localStorage.getItem("toggleOn"));
-            if (localStorage.getItem("toggleOn")){
-                alert(localStorage.getItem("toggleOn"));
-                document.getElementById("switch").checked = localStorage.getItem("toggleOn");
+            //It is illogical why this piece of code does not work. 
+//            alert(localStorage.getItem("toggleOn"));              //Passes false
+//            if (localStorage.getItem("toggleOn")){                //Execute in spite of value being false
+//                alert(localStorage.getItem("toggleOn"));          //Alert reads out false
+//                document.getElementById("switch").checked = localStorage.getItem("toggleOn");     //Some how it is true? I am confused
+//            }
+            
+            //quick fix using numerical values instead of boolean
+            if (localStorage.getItem("toggleOn") > 0){
+                document.getElementById("switch").checked = true;
             }
             toggleDisable();
-            //Is going on
             
         } else {
             cardList = {}
@@ -157,8 +161,10 @@ $(document).ready(function(){
             key = "card"+id;
             cardList[key] = defaultCard;
             console.log(cardList);
+            
             //toggleOn
             document.getElementById("switch").checked = true;
+            toggleDisable();
         }
     } else {
         
@@ -180,16 +186,23 @@ $(document).ready(function(){
     $('#reminderCards').on('change','.time-select', function() {
  cardList[$(this).parent().attr('id')].hour = parseInt($(this).val());
                 console.log(cardList);
+        localStorage.setItem("action", "dataChange");
+        localStorage.setItem("justChanged", $(this).parent().attr('id'));
     });
     
     $('#reminderCards').on('change','.cardSlider', function() {
     cardList[$(this).parent().attr('id')].min = parseInt($(this).val());
+        localStorage.setItem("action", "dataChange");
+        localStorage.setItem("justChanged", $(this).parent().attr('id'));
     console.log(cardList);
     });
     
     $('#reminderCards').on('click', '.message', function() {
 cardList[$(this).parent().attr('id')].custMsg =
             prompt("Remind yourself", "Custom message here");
+        
+        localStorage.setItem("action", "dataChange");
+        localStorage.setItem("justChanged", $(this).parent().attr('id'));
         
         console.log(cardList);
     });
@@ -199,8 +212,12 @@ cardList[$(this).parent().attr('id')].custMsg =
           if ($(this).attr('class') == "onRepeat")
           {
             cardList[$(this).parent().attr('id')].repeat = true;
+              localStorage.setItem("action", "dataChange");
+              localStorage.setItem("justChanged", $(this).parent().attr('id'));
           } else {
             cardList[$(this).parent().attr('id')].repeat = false;   
+              localStorage.setItem("action", "dataChange");
+              localStorage.setItem("justChanged", $(this).parent().attr('id'));
           }
 
         console.log(cardList);
@@ -214,9 +231,10 @@ cardList[$(this).parent().attr('id')].custMsg =
             var tempCard = new cardData(id,2,0,5,false);
             addCard(tempCard);
             key = "card"+id;
-            alert(key);
             console.log(tempCard);
             cardList[key] = tempCard;
+            localStorage.setItem("action", "newData");
+            localStorage.setItem("justChanged", key);
             console.log(cardList);
         }
     });
@@ -224,7 +242,8 @@ cardList[$(this).parent().attr('id')].custMsg =
     $("#reminderCards").on('click','.btn-alert', function() {
         key = "card"+($(this).parent().attr('id').match(/\d+/)[0]);
         delete cardList[key];
-        
+        localStorage.setItem("action", "delete");
+        localStorage.setItem("justChanged", key);
         $(this).parent().remove();
         console.log(cardList);
     });
@@ -274,6 +293,8 @@ $(this).parent().find(".cardType").replaceWith("<input class='message' type='but
         $(this).removeClass(lastClass);
         $(this).addClass("img"+(imgNum+1).toString());
         cardList[$(this).parent().attr('id')].imgNum = parseInt(($(this).attr('class').split(' ').pop()).substring(3,4));
+            localStorage.setItem("action", "dataChange");
+            localStorage.setItem("justChanged", $(this).parent().attr('id'));
         console.log(cardList);
         }
     });
@@ -281,14 +302,9 @@ $(this).parent().find(".cardType").replaceWith("<input class='message' type='but
     $("#container").on('click', function() {
         syncStorage(cardList);
     });
+    
+    $("#container").on('change', function() {
+        syncStorage(cardList);
+    });
+    
 });
-
-function creationCallback(notID) {
-	if (document.getElementById("clear").checked) {
-		setTimeout(function() {
-			chrome.notifications.clear(notID, function(wasCleared) {
-				console.log("Notification " + notID + " cleared: " + wasCleared);
-			});
-		}, 3000);
-	}
-}
