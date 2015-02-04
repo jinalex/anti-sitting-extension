@@ -9,3 +9,16 @@ I was inspired to create this after hearing about the harmful effects of sedenta
 
 ##Screenshots
 ![alt tag](https://github.com/jinalex/anti-sitting-extension/blob/master/screenshots/main.PNG)
+
+##Installation
+I would greatly appreciate it if you decide to try out my extension. Please do report any bugs you may find.
+
+To install, download this repository to your computer and load it on Chrome as an unpacked extension.
+
+1. Download this repository to your computer
+2. Go to chrome://extensions
+3. Click Load Unpacked Extension
+4. Browse your documents for the Anti-sitting-extension folder
+5. Huzzah! It's installed
+
+![alt tag](https://github.com/jinalex/anti-sitting-extension/blob/master/screenshots/install.PNG)
