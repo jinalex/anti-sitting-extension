@@ -165,6 +165,7 @@ $(document).ready(function(){
             //toggleOn
             document.getElementById("switch").checked = true;
             toggleDisable();
+            localStorage.setItem("toggleOn", 2);
         }
     } else {
         

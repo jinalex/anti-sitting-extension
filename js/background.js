@@ -126,8 +126,13 @@ function onStorageEvent(storageEvent) {
         deleteAlarm();
         updateAlarm();
     }
-        /*(storageEvent.key == "toggleOn")*/ {
+    else /*(storageEvent.key == "toggleOn")*/ {
+        if (localStorage.getItem("toggleOn") == 2) {
+            var cardList = JSON.parse(localStorage.getItem("data"));
+            console.log(cardList);
+        }
         toggle();
+        
     } 
 }
 
