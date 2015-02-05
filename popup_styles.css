@@ -158,7 +158,7 @@ div .box {
 }
 #container{
 	width: 100%;
-    max-width: 460px;
+    min-width: 460px;
 	height: auto;
     min-height: 600px;
 	background: #EEEEEE;
