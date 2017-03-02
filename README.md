@@ -1,8 +1,6 @@
 Anti-sitting-extension
 ======================
 
-WORK IN PROGRESS
-
 Now Available on the Chrome Store! https://chrome.google.com/webstore/detail/get-up-reminder-alpha/occnmkldimeeohichfkokhangifpbdgf
 
 This is a Chrome extension which is intended to remind Chrome users to periodically get up from their seats and move about. This is an effort to combat sedentary behaviour. 
